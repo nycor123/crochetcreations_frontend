@@ -1,19 +1,22 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { isLoggedIn } from '$lib/index';
     import Alert from './Alert.svelte';
 
-    onMount(async () => {
-        if (await isLoggedIn()) {
-            redirect();
-        }
-    });
+    export let data;
+
+    $: isLoggedIn = data.userInfo != null;
 
     let email;
     let password;
     let loginAttempted = false;
     let alertProps = {};
+
+    onMount(() => {
+        if (isLoggedIn) {
+            redirect();
+        }
+    });
     
     async function authenticate() {
         let response = await fetch("http://localhost:8080/api/v1/auth/signin", {

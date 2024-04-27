@@ -9,25 +9,14 @@
     export let data;
 
     let innerWidth;
-
-    async function getUserInfo() {
-        let response = await fetch("http://localhost:8080/api/v1/user/info", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Accept" : "application/json"
-            }
-        });
-        return await response.json();
-    }
-
-    getUserInfo().then(json => console.log("Hi, " + json.email));
 </script>
 
 <svelte:window bind:innerWidth />
 
 <AnnouncementSlide />
-<Header navData={data.navigationData} />
+<Header 
+    userInfo={data.userInfo}
+    navData={data.navigationData} />
 {#if innerWidth > 768}
     <Navigation navigationData={data.navigationData} />
 {/if}
