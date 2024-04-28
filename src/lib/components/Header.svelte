@@ -49,9 +49,9 @@
 
 <svelte:window bind:innerWidth />
 
-<nav class="navbar mx-2 align-self-center gap-2">
+<nav class="navbar d-flex justify-content-between align-items-center mx-2">
     {#if innerWidth < 768}
-        <div>
+        <div class="offCanvasToggle">
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width="22" 
@@ -86,63 +86,80 @@
                 </ul>
             </div>
         </div>
+    {:else}
+        <div class="fillerDiv" />
     {/if}
-    <a class="navbar-brand me-auto ms-auto" href="#">
-        <img src={logo} alt="site-logo" />
-    </a>
-    {#if isLoggedIn}
-        <div class="btn-group dropstart">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    
+    <div>
+        <a class="navbar-brand mx-auto" href="#">
+            <img src={logo} alt="site-logo" />
+        </a>
+    </div>
+    
+    <div class="userAndCart d-flex justify-content-end">
+        {#if isLoggedIn}
+            <div class="btn-group dropstart me-2">
+                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="{svgSize}" 
+                        height="{svgSize}" 
+                        fill="currentColor" 
+                        class="bi bi-person-check" 
+                        viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                    </svg>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item">
+                        <a class="nav-link ms-2" href="#" role="button" on:click={logout}>My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ms-2" href="#" role="button" on:click={logout}>My Purchases</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ms-2" href="#" role="button" on:click={logout}>Logout</a>
+                    </li>
+                </ul>
+            </div>
+        {:else}
+            <div class="me-2">
+                <a href="/login">
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="{svgSize}" 
+                        height="{svgSize}" 
+                        fill="currentColor" 
+                        class="bi bi-person" 
+                        viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                    </svg>
+                </a>
+            </div>
+        {/if}
+        <div>
+            <a href=#>
                 <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="{svgSize}" 
                     height="{svgSize}" 
                     fill="currentColor" 
-                    class="bi bi-person-check" 
+                    class="bi bi-cart3" 
                     viewBox="0 0 16 16">
-                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                    <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                 </svg>
             </a>
-            <ul class="dropdown-menu">
-                <li class="nav-item">
-                    <a class="nav-link ms-2" href="#" role="button" on:click={logout}>My Account</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ms-2" href="#" role="button" on:click={logout}>My Purchases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ms-2" href="#" role="button" on:click={logout}>Logout</a>
-                </li>
-            </ul>
         </div>
-    {:else}
-        <a href="/login">
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="{svgSize}" 
-                height="{svgSize}" 
-                fill="currentColor" 
-                class="bi bi-person" 
-                viewBox="0 0 16 16">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-            </svg>
-        </a>
-    {/if}
-    <a href=#>
-        <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="{svgSize}" 
-            height="{svgSize}" 
-            fill="currentColor" 
-            class="bi bi-cart3" 
-            viewBox="0 0 16 16">
-            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-        </svg>
-    </a>
+    </div>
 </nav>
 
 <style>
+    .offCanvasToggle, .fillerDiv, .userAndCart {
+        width: 14%;
+        margin: 0;
+    }
+    
     a {
         color: black;
     }
