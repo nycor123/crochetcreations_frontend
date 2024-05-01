@@ -1,36 +1,51 @@
 <script>
-
-    //TODO: Add loading animation while waiting for the product to save.
-    //TODO: Add error handling.
-
     let _product = {
         name: "",
         description: "",
         price: "",
         listedForSale: "",
         imageIds: []
-    }
+    };
 
     let _files;
+    let isSaving = false;
 
     async function saveProduct() {
-        let products = [];
-        if (isValidProduct(_product)) {
-            if (_files != null && _files.length > 0 && areValidFiles(_files)) {
-                _product.imageIds = await uploadImages(_files);
+        isSaving = true;
+        try {
+            let products = [];
+            if (isValidProduct(_product)) {
+                if (_files != null && _files.length > 0 && areValidFiles(_files)) {
+                    _product.imageIds = await uploadImages(_files);
+                }
+                products.push(_product);
+                let response = await fetch("http://localhost:8080/api/v1/products", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(products)
+                });
+                let resJson = await response.json();
+                if (!response.ok) {
+                    throw new Error(resJson.message);
+                }
             }
-            products.push(_product);
-            let response = await fetch("http://localhost:8080/api/v1/products", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(products)
-            });
-            let resJson = await response.json();
-            console.log(resJson);
+            isSaving = false;
+            triggerAlert("success", "Successfully saved product - ");
+            _product = {
+                name: "",
+                description: "",
+                price: "",
+                listedForSale: "",
+                imageIds: []
+            };
+            _files = null;
+        } catch(err) {
+            isSaving = false;
+            triggerAlert("danger", "Unable to save product", err);
         }
     }
 
@@ -63,10 +78,35 @@
         return true;
     }
 
+    function triggerAlert(type, message, errorMsg) {
+        const alertPlaceholder = document.getElementById('alertPlaceholder');
+        const wrapper = document.createElement('div');
+
+        if (type === "success") {
+            wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}<a href="#">view</a></div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+            ].join('');
+        } else {
+            wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message} - ${errorMsg}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+            ].join('');
+        }
+       
+        alertPlaceholder.append(wrapper);
+    }
+
 </script>
 
 <div class="row mx-3 my-3">
     <div class="col-sm-12 col-md-6 col-lg-4 mx-auto">
+        <div id="alertPlaceholder"></div>
+
         <form on:submit={saveProduct}>
             <h1 class="mb-3">New Product</h1>
         
@@ -105,10 +145,19 @@
             </div>
 
             <div class="mt-5">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="submit" class="btn btn-danger">Cancel</button>
+                <button type="submit" class="btn btn-outline-success me-2">Save</button>
+                <button type="submit" class="btn btn-outline-danger">Cancel</button>
             </div>
         </form>
+
+        {#if isSaving}
+            <div class="z-3 position-relative bottom-50 start-50">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        {/if}
+          
     </div>
 </div>
 

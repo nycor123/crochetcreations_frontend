@@ -14,12 +14,19 @@
 <svelte:window bind:innerWidth />
 
 <AnnouncementSlide />
+
 <Header 
     userInfo={data.userInfo}
     navData={data.navigationData} />
+
 {#if innerWidth > 768}
     <Navigation navigationData={data.navigationData} />
 {/if}
+
 <Carousel />
-<Products />
+
+<Products 
+    group="Featured" 
+    products={data.featuredProducts} />
+    
 <Footer />

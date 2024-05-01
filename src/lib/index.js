@@ -1,5 +1,5 @@
+export const featuredProducts = await getFeaturedProducts();
 export const userInfo = await getUserInfo();
-
 export const navigationData = [
     {
         displayText: "Home",
@@ -51,5 +51,20 @@ async function getUserInfo() {
         return await response.json();
     } catch(err) {
         return null;
+    }
+}
+
+async function getFeaturedProducts() {
+    try {
+        let response = await fetch("http://localhost:8080/api/v1/products", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Accept" : "application/json"
+            }
+        });
+        return await response.json();
+    } catch(err) {
+        console.log(err);
     }
 }

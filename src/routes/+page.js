@@ -1,7 +1,8 @@
-import { userInfo, navigationData } from '$lib/index.js';
+import { featuredProducts, userInfo, navigationData } from '$lib/index.js';
 
 export function load() {
-    return { 
+    return {
+        featuredProducts: featuredProducts,
         userInfo: userInfo,
         navigationData: navigationData
     };
