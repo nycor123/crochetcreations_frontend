@@ -7,45 +7,43 @@
         imageIds: []
     };
 
-    let _files;
-    let isSaving = false;
+    let _files = [];
+    let _isSaving = false;
 
-    async function saveProduct() {
-        isSaving = true;
+    async function saveProduct(event) {
+        let form = event.target;
+        _isSaving = true;
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+            _isSaving = false;
+            return;
+        }
         try {
             let products = [];
-            if (isValidProduct(_product)) {
-                if (_files != null && _files.length > 0 && areValidFiles(_files)) {
-                    _product.imageIds = await uploadImages(_files);
-                }
-                products.push(_product);
-                let response = await fetch("http://localhost:8080/api/v1/products", {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify(products)
-                });
-                let resJson = await response.json();
-                if (!response.ok) {
-                    throw new Error(resJson.message);
-                }
+            if (_files != null && _files.length > 0) {
+                _product.imageIds = await uploadImages(_files);
             }
-            isSaving = false;
-            triggerAlert("success", "Successfully saved product - ");
-            _product = {
-                name: "",
-                description: "",
-                price: "",
-                listedForSale: "",
-                imageIds: []
-            };
-            _files = null;
+            products.push(_product);
+            let response = await fetch("http://localhost:8080/api/v1/products", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(products)
+            });
+            let resJson = await response.json();
+            if (!response.ok) {
+                throw new Error(resJson.message);
+            }
+            _isSaving = false;
+            form.classList.remove("was-validated");
+            triggerAlert("success", "Successfully saved product - "); //TODO: create product link
+            form.reset();
         } catch(err) {
-            isSaving = false;
-            triggerAlert("danger", "Unable to save product", err);
+            _isSaving = false;
+            triggerAlert("danger", "Unable to save product", null, err);
         }
     }
 
@@ -68,24 +66,14 @@
         return imageIds;
     }
 
-    function isValidProduct(product) {
-        //TODO
-        return true;
-    }
-
-    function areValidFiles(files) {
-        //TODO
-        return true;
-    }
-
-    function triggerAlert(type, message, errorMsg) {
+    function triggerAlert(type, message, productLink = "#", errorMsg) {
         const alertPlaceholder = document.getElementById('alertPlaceholder');
         const wrapper = document.createElement('div');
 
         if (type === "success") {
             wrapper.innerHTML = [
             `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}<a href="#">view</a></div>`,
+            `   <div>${message}<a href=${productLink}>view</a></div>`,
             '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
             '</div>'
             ].join('');
@@ -107,12 +95,15 @@
     <div class="col-sm-12 col-md-6 col-lg-4 mx-auto">
         <div id="alertPlaceholder"></div>
 
-        <form on:submit={saveProduct}>
+        <form on:submit={saveProduct} novalidate>
             <h1 class="mb-3">New Product</h1>
         
             <div class="form-floating mb-3">
-                <input type="text" id="nameInput" class="form-control" placeholder="" bind:value={ _product.name }>
+                <input type="text" id="nameInput" class="form-control" placeholder="" bind:value={ _product.name } required>
                 <label for="nameInput" class="form-label">Product name</label>
+                <div class="invalid-feedback">
+                    Product name is required.
+                </div>
             </div>
         
             <div class="form-floating mb-3">
@@ -146,11 +137,11 @@
 
             <div class="mt-5">
                 <button type="submit" class="btn btn-outline-success me-2">Save</button>
-                <button type="submit" class="btn btn-outline-danger">Cancel</button>
+                <button type="button" class="btn btn-outline-danger">Cancel</button>
             </div>
         </form>
 
-        {#if isSaving}
+        {#if _isSaving}
             <div class="z-3 position-relative bottom-50 start-50">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>

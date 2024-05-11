@@ -1,7 +1,7 @@
 <script>
     export let product;
 
-    $: _imgUrls = product.images == null || product.images.length == 0 ? ["https://placehold.co/200x200"] : getImgUrls();
+    $: _imgUrls = product.images == null || product.images.length == 0 ? ["https://placehold.co/400"] : getImgUrls();
 
     function getImgUrls() {
         let imgUrls = [];
@@ -12,25 +12,22 @@
     }
 </script>
 
-<div class="card">
-    <a href="#">
-        <img src={_imgUrls[0]} class="card-img-top" alt="...">
-        <div class="card-body">
-        <p class="card-text fs-6">{product.name}</p>
+<div class="card h-100">
+    <img src={_imgUrls[0]} class="card-img-top" alt="...">
+    <div class="card-body">
+        <p class="name card-text">{product.name}</p>
         <p class="price card-text"><strong>₱{product.effectivePrice.amount.toLocaleString()}.00</strong></p>
-        </div>
-    </a>
+    </div>
 </div>
 
 <style>
-    .card {
-        margin-top: 1em;
-        font-size: 12px;
+    img {
+        width: 100%;
+        height: 100%;
     }
-    
-    a {
-        text-decoration: none;
-        color: black;
+
+    .name {
+        font-size: smaller;
     }
 
     .price {

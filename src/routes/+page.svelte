@@ -9,6 +9,7 @@
     export let data;
 
     let innerWidth;
+    let featuredProducts = data.featuredProducts.filter(p => p.listedForSale);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -27,6 +28,6 @@
 
 <Products 
     group="Featured" 
-    products={data.featuredProducts} />
+    products={featuredProducts} />
     
 <Footer />

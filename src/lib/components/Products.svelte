@@ -7,11 +7,20 @@
 
 <div class="container">
     <h3 class="mt-3">{group}</h3>
-    <div class="row">
+    <div class="row row-cols-2 row-cols-md-4 mt-3">
         {#each products as product }
-            <div class="col-6 col-md-3">
-                <ProductCard product={product}/>
+            <div class="col mb-3">
+                <a href={`products/${product.id}`}>
+                    <ProductCard product={product}/>
+                </a>
             </div>
         {/each}
     </div>
 </div>
+
+<style>
+     a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
