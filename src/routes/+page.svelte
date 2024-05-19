@@ -24,10 +24,18 @@
     <Navigation navigationData={data.navigationData} />
 {/if}
 
-<Carousel />
+<div class="container mt-4">
+    <Carousel /> <!-- min/max: 1200x600 -->
 
-<Products 
-    group="Featured" 
-    products={featuredProducts} />
-    
+    <Products 
+        group="Featured" 
+        products={featuredProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
+</div>
+
 <Footer />
+
+<style>
+    .container {
+        max-width: 1140px;
+    }
+</style>

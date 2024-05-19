@@ -3,34 +3,30 @@ export const userInfo = await getUserInfo();
 export const navigationData = [
     {
         displayText: "Home",
-        link: "#"
-    }, 
+        link: "/"
+    },
     {
-        displayText: "Best Sellers",
+        displayText: "Featured",
         link: "#"
-    }, 
+    },
     {
-        displayText: "New Arrivals",
+        displayText: "Collections",
         link: "#"
-    }, 
+    },
     {
         displayText: "All Products",
         link: "#"
-    }, 
+    },
     {
         displayText: "Socials",
         links: [
             {
                 displayText: "Facebook",
-                link: "#"
+                link: "https://www.facebook.com/profile.php?id=61557071875746&mibextid=LQQJ4d"
             }, 
             {
                 displayText: "Instagram",
-                link: "#"
-            }, 
-            {
-                displayText: "X",
-                link: "#"
+                link: "https://www.instagram.com/juleycrochetph?igsh=cXptMWFzZHZndmo="
             }
         ]
     }

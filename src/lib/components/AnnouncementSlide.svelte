@@ -1,5 +1,9 @@
 <div>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>This site is still in beta. Please contact us through our 
+        <a href="https://www.facebook.com/profile.php?id=61557071875746&mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer">Facebook</a> or 
+        <a href="https://www.instagram.com/juleycrochetph?igsh=cXptMWFzZHZndmo=" target="_blank" rel="noopener noreferrer">Instagram</a> 
+        for inquiries and placing orders.
+    </p>
 </div>
 
 <style>
@@ -10,9 +14,9 @@
         padding: .2em;
     }
 
-    div p {
+    div p, a {
         color: whitesmoke;
-        font-size: .85em;
+        font-size: small;
         margin: 0;
         padding: 0;
     }

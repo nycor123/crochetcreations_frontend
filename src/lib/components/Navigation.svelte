@@ -1,11 +1,25 @@
 <script>
+    import { onMount } from "svelte";
+
     export let navigationData;
+
+    onMount(() => {
+        let links = document.getElementsByTagName("a");
+        for (let i = 0; i < links.length; i++) {
+            let link = links[i];
+            let linkUrl = link.getAttribute("href");
+            if (linkUrl.includes("facebook") || linkUrl.includes("instagram")) {
+                links[i].setAttribute("target", "_blank");
+                links[i].setAttribute("rel", "noopener noreferrer");
+            }
+        }
+    });
 </script>
 
 <nav class="navbar justify-content-center">
     {#each navigationData as navData}
         {#if navData.link}
-            <a class="nav-link" href={navData.link}>{navData.displayText}</a>
+                <a class="nav-link" href={navData.link}>{navData.displayText}</a>
         {:else if navData.links}
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

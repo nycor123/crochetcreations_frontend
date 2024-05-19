@@ -91,7 +91,7 @@
     {/if}
     
     <div>
-        <a class="navbar-brand mx-auto" href="#">
+        <a class="navbar-brand mx-auto" href="/">
             <img src={logo} alt="site-logo" />
         </a>
     </div>

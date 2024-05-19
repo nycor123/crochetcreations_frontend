@@ -89,6 +89,10 @@
         alertPlaceholder.append(wrapper);
     }
 
+    function cancel(event) {
+        window.location.href = "/admin";
+    }
+
 </script>
 
 <div class="row mx-3 my-3">
@@ -137,7 +141,7 @@
 
             <div class="mt-5">
                 <button type="submit" class="btn btn-outline-success me-2">Save</button>
-                <button type="button" class="btn btn-outline-danger">Cancel</button>
+                <button type="button" class="btn btn-outline-danger" on:click={ cancel }>Cancel</button>
             </div>
         </form>
 
