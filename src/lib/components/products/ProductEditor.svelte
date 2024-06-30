@@ -1,5 +1,9 @@
 <script>
+    import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import { siteUrls, backendUrls } from '$lib/index.js';
+
+    export let productId;
 
     let _product = {
         name: "",
@@ -12,6 +16,49 @@
     let _images = [];
     let _isSaving = false;
 
+    onMount(() => {
+        if (productId !== null) {
+            loadProduct();
+        }
+    });
+
+    async function loadProduct() {
+        let fetchedProduct = await getProduct(productId);
+        _product.id = productId;
+        _product.name = fetchedProduct.name;
+        _product.description = fetchedProduct.description;
+        _product.price = fetchedProduct.effectivePrice.amount;
+        _product.listedForSale = fetchedProduct.listedForSale;
+        if (fetchedProduct.images !== null && fetchedProduct.images.length > 0) {
+            let fetchedImages = [];
+            for (let img of fetchedProduct.images) {
+                let fetchedImg = {
+                    file: null,
+                    id: img.id,
+                    url: img.url,
+                    priority: img.priority
+                };
+                fetchedImages.push(fetchedImg);
+            }
+            _images = fetchedImages.sort((img1, img2) => img1.priority - img2.priority);
+        }
+    }
+
+    async function getProduct(productId) {
+        try {
+            let response = await fetch(backendUrls.baseUrl + `products/${productId}`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Accept" : "application/json"
+                }
+            });
+            return await response.json();
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
     async function saveProduct(event) {
         let form = event.target;
         _isSaving = true;
@@ -22,12 +69,12 @@
         }
         try {
             let products = [];
-            // upload images
+            // update images
             if (_images != null && _images.length > 0) {
                 let productImages = [];
                 for (let image of _images) {
                     let productImage = {
-                        id: await uploadImage(image.file),
+                        id: image.id !== null ? image.id : await uploadImage(image.file),
                         priority: image.priority
                     };
                     productImages.push(productImage);
@@ -36,23 +83,39 @@
             }
             // save product
             products.push(_product);
-            let response = await fetch(backendUrls.baseUrl + "products", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(products)
-            });
-            let resJson = await response.json();
+            let response = null;
+            let resJson = null;
+            if (productId === null) {
+                response = await fetch(backendUrls.baseUrl + "products", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(products)
+                });
+            } else {
+                response = await fetch(backendUrls.baseUrl + `products/${productId}`, {
+                    method: "PATCH",
+                    credentials: "include",
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(products[0])
+                });
+            }
+            resJson = await response.json();
             if (!response.ok) {
                 throw new Error(resJson.message);
             }
             // cleanup
             _isSaving = false;
+            if (productId !== null) {
+                goto(`/products/${productId}`);
+            }
             form.classList.remove("was-validated");
-            console.log(resJson);
             triggerAlert("success", "Successfully saved product - ", siteUrls.products + resJson[0].id);
             _images = [];
             form.reset();
@@ -102,15 +165,18 @@
 
     async function addNewImage(event) {
         let image = {
+            id: null,
             file: event.target.files[0],
             url: await generateUrl(event.target.files[0]),
             priority: _images.length + 1
         };
         _images = [..._images, image];
+        event.target.value = '';
     }
 
-    function removeImage(event, image) {
-        _images.splice(_images.indexOf(image) - 1, 1);
+    function removeImage(image) {
+        let index = _images.findIndex(img => img.url === image.url);
+        _images.splice(index, 1);
         for (let img of _images) {
             img.priority = _images.indexOf(img) + 1;
         }
@@ -118,13 +184,16 @@
     }
     
     async function generateUrl(file) {
-        return new Promise((resolve) => {
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                resolve(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        });
+        if (file !== null) {
+            return new Promise((resolve) => {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    resolve(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        return null;
     }
 
     function allowDrop(event) {
@@ -168,7 +237,7 @@
         <div id="alertPlaceholder"></div>
 
         <form on:submit={saveProduct} novalidate>
-            <h1 class="mb-3">New Product</h1>
+            <h1 class="mb-3">{productId !== null ? "Update Product" : "Create Product"}</h1>
         
             <div class="form-floating mb-3">
                 <input type="text" id="nameInput" class="form-control" placeholder="" bind:value={ _product.name } required>
@@ -179,7 +248,7 @@
             </div>
         
             <div class="form-floating mb-3">
-                <textarea id="descriptionInput" class="form-control" rows="5" placeholder="" bind:value={ _product.description } />
+                <textarea id="descriptionInput" class="form-control" rows="15" placeholder="" bind:value={ _product.description } />
                 <label for="descriptionInput" class="form-label">Description</label>
             </div>
         
@@ -214,13 +283,13 @@
                                     class="bi bi-x-circle-fill mx-1 my-1" 
                                     viewBox="0 0 16 16" 
                                     role="button"
-                                    on:click={removeImage(image)}>
+                                    on:click={() => removeImage(image)}>
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
                                 </svg>
                                 <img 
-                                    id={image.file.name}
-                                    src={generatedUrl}
-                                    alt="{image.file.name}" 
+                                    id={image.file !== null ? image.file.name : image.id}
+                                    src={generatedUrl !== null ? generatedUrl : image.url}
+                                    alt="" 
                                     width="100%" 
                                     draggable="true"
                                     on:dragstart={drag} />

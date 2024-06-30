@@ -1,6 +1,8 @@
 export const featuredProducts = await getFeaturedProducts();
 export const userInfo = await getUserInfo();
 export const siteUrls = {
+    admin: "http://localhost:5173/admin/",
+    productUpdate: "http://localhost:5173/admin/update/product/",
     home: "http://localhost:5173/",
     products: "http://localhost:5173/products/"
 };

@@ -3,6 +3,7 @@
     import Navigation from '$lib/components/Navigation.svelte';
     import Footer from '$lib/components/Footer.svelte';
     import AnnouncementSlide from '$lib/components/AnnouncementSlide.svelte';
+    import { siteUrls } from '$lib/index.js';
 
     export let data;
 
@@ -28,7 +29,7 @@
 <div class="container mt-4">
     {#if data.userInfo !== null && data.userInfo.role.toLowerCase() === 'admin'}
         <div class="row row-cols-1 mx-2">
-            <a href="#">Edit</a>
+            <a href="{siteUrls.productUpdate + data.product.id}">Edit</a>
         </div>
     {/if}
     <div class="row row-cols-1 row-cols-md-2 mx-2">
