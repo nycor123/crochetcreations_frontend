@@ -1,4 +1,6 @@
 <script>
+    import { siteUrls, backendUrls } from '$lib/index.js';
+
     let _product = {
         name: "",
         description: "",
@@ -34,7 +36,7 @@
             }
             // save product
             products.push(_product);
-            let response = await fetch("http://localhost:8080/api/v1/products", {
+            let response = await fetch(backendUrls.baseUrl + "products", {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -50,7 +52,8 @@
             // cleanup
             _isSaving = false;
             form.classList.remove("was-validated");
-            triggerAlert("success", "Successfully saved product - "); //TODO: create product link
+            console.log(resJson);
+            triggerAlert("success", "Successfully saved product - ", siteUrls.products + resJson[0].id);
             _images = [];
             form.reset();
         } catch(err) {
@@ -62,7 +65,7 @@
     async function uploadImage(file) {
         let formData = new FormData();
         formData.append("file", file);
-        let response = await fetch("http://localhost:8080/api/v1/images/upload", {
+        let response = await fetch(backendUrls.baseUrl + "images/upload", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -74,14 +77,14 @@
         return resJson.id;
     }
 
-    function triggerAlert(type, message, productLink = "#", errorMsg) {
+    function triggerAlert(type, message, productUrl = "#", errorMsg) {
         const alertPlaceholder = document.getElementById('alertPlaceholder');
         const wrapper = document.createElement('div');
 
         if (type === "success") {
             wrapper.innerHTML = [
             `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}<a href=${productLink}>view</a></div>`,
+            `   <div>${message}<a href=${productUrl}>view</a></div>`,
             '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
             '</div>'
             ].join('');
@@ -104,6 +107,14 @@
             priority: _images.length + 1
         };
         _images = [..._images, image];
+    }
+
+    function removeImage(event, image) {
+        _images.splice(_images.indexOf(image) - 1, 1);
+        for (let img of _images) {
+            img.priority = _images.indexOf(img) + 1;
+        }
+        _images = _images;
     }
     
     async function generateUrl(file) {
@@ -193,6 +204,19 @@
                             {#await generateUrl(image.file)}
                                 <span>...</span>
                             {:then generatedUrl}
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <!-- svelte-ignore a11y-interactive-supports-focus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                    width="3%" 
+                                    height="3%" 
+                                    fill="#D0D0D0" 
+                                    style="position: absolute;" 
+                                    class="bi bi-x-circle-fill mx-1 my-1" 
+                                    viewBox="0 0 16 16" 
+                                    role="button"
+                                    on:click={removeImage(image)}>
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                </svg>
                                 <img 
                                     id={image.file.name}
                                     src={generatedUrl}
@@ -206,11 +230,10 @@
                 {/if}
                 <div class="col-4 col-xl-3 my-2">   
                     <label for="add-image">
-                        <div style="width: 100%; background-color: lightgray; padding: 1.5em;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="gray" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                            </svg>
-                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#D0D0D0" class="bi bi-plus-square" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                          </svg>
                     </label>
                     <input id="add-image" class="position-absolute" type="file" accept="image/png, image/jpeg" style="visibility: hidden;" on:change={addNewImage}>
                 </div>
@@ -222,8 +245,8 @@
             </div>
 
             <div class="mt-5">
-                <button type="submit" class="btn btn-outline-success me-2">Save</button>
-                <button type="button" class="btn btn-outline-danger" on:click={cancel}>Cancel</button>
+                <button type="submit" class="btn me-2" style="color: #66CC33; border-color: #66CC33">Save</button>
+                <button type="button" class="btn" style="color: #CC3333; border-color: #CC3333" on:click={cancel}>Cancel</button>
             </div>
         </form>
 

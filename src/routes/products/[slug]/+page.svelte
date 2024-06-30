@@ -26,6 +26,11 @@
 {/if}
 
 <div class="container mt-4">
+    {#if data.userInfo !== null && data.userInfo.role.toLowerCase() === 'admin'}
+        <div class="row row-cols-1 mx-2">
+            <a href="#">Edit</a>
+        </div>
+    {/if}
     <div class="row row-cols-1 row-cols-md-2 mx-2">
         <div id="productImagesCarousel" class="col carousel slide p-0">
             <div class="carousel-indicators">

@@ -1,5 +1,12 @@
 export const featuredProducts = await getFeaturedProducts();
 export const userInfo = await getUserInfo();
+export const siteUrls = {
+    home: "http://localhost:5173/",
+    products: "http://localhost:5173/products/"
+};
+export const backendUrls = {
+    baseUrl: "http://localhost:8080/api/v1/"
+}
 export const navigationData = [
     {
         displayText: "Home",
