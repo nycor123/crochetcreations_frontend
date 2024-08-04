@@ -1,53 +1,60 @@
-export const featuredProducts = await getFeaturedProducts();
-export const userInfo = await getUserInfo();
+// Frontend Urls
+const baseSiteUrl = 'http://localhost:5173/';
 export const siteUrls = {
-    admin: "http://localhost:5173/admin/",
-    productUpdate: "http://localhost:5173/admin/update/product/",
-    home: "http://localhost:5173/",
-    products: "http://localhost:5173/products/"
+    home: baseSiteUrl,
+    admin: baseSiteUrl + 'admin/',
+    create: baseSiteUrl + 'admin/create/',
+    update: baseSiteUrl + 'admin/update/',
+    jumbotronContents: baseSiteUrl + 'admin/jumbotron-contents',
+    products: baseSiteUrl + 'products/'
 };
+
+// Backend Urls
 export const backendUrls = {
-    baseUrl: "http://localhost:8080/api/v1/"
+    baseUrl: 'http://localhost:8080/api/v1/'
 }
+
+// Navigation
 export const navigationData = [
     {
-        displayText: "Home",
-        link: "/"
+        displayText: 'Home',
+        link: '/'
     },
     {
-        displayText: "Featured",
-        link: "#"
+        displayText: 'Featured',
+        link: '#'
     },
     {
-        displayText: "Collections",
-        link: "#"
+        displayText: 'Collections',
+        link: '#'
     },
     {
-        displayText: "All Products",
-        link: "#"
+        displayText: 'All Products',
+        link: '#'
     },
     {
-        displayText: "Socials",
+        displayText: 'Socials',
         links: [
             {
-                displayText: "Facebook",
-                link: "https://www.facebook.com/profile.php?id=61557071875746&mibextid=LQQJ4d"
+                displayText: 'Facebook',
+                link: 'https://www.facebook.com/profile.php?id=61557071875746&mibextid=LQQJ4d'
             }, 
             {
-                displayText: "Instagram",
-                link: "https://www.instagram.com/juleycrochetph?igsh=cXptMWFzZHZndmo="
+                displayText: 'Instagram',
+                link: 'https://www.instagram.com/juleycrochetph?igsh=cXptMWFzZHZndmo='
             }
         ]
     }
 ];
 
-async function getUserInfo() {
+// Fetch Methods
+export async function getUserInfo() {
     try {
-        let response = await fetch("http://localhost:8080/api/v1/user/info", {
-            method: "GET",
-            credentials: "include",
+        let response = await fetch('http://localhost:8080/api/v1/user/info', {
+            method: 'GET',
+            credentials: 'include',
             headers: {
-                "Accept" : "application/json"
+                'Accept' : 'application/json'
             }
         });
         if (response.status !== 200) {
@@ -59,13 +66,13 @@ async function getUserInfo() {
     }
 }
 
-async function getFeaturedProducts() {
+export async function getFeaturedProducts() {
     try {
-        let response = await fetch("http://localhost:8080/api/v1/products", {
-            method: "GET",
-            credentials: "include",
+        let response = await fetch('http://localhost:8080/api/v1/products', {
+            method: 'GET',
+            credentials: 'include',
             headers: {
-                "Accept" : "application/json"
+                'Accept' : 'application/json'
             }
         });
         return await response.json();
