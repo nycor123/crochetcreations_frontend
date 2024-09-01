@@ -1,19 +1,19 @@
 <script>
     import { onMount } from 'svelte';
-    import { getFeaturedProducts } from '$lib/index.js';
+    import { getAllProducts } from '$lib/index.js';
     import Header from '$lib/components/Header.svelte';
 	import AnnouncementSlide from '$lib/components/AnnouncementSlide.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
-	import Products from '$lib/components/Products.svelte';
+	import Products from '$lib/components/products/Products.svelte';
     import Footer from '$lib/components/Footer.svelte';
 
     export let data;
 
-    let featuredProducts = [];
+    let _allProducts = [];
 
     onMount(async () => {
-        featuredProducts = await getFeaturedProducts();
+        _allProducts = await getAllProducts();
     });
 
     let innerWidth;
@@ -32,8 +32,8 @@
 <div class='container mt-4'>
     <Carousel jumbotronContents={data.jumbotronContents} /> <!-- min/max: 1200x600 -->
     <Products 
-        group='Featured' 
-        products={featuredProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
+        group='All Products' 
+        products={_allProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
 </div>
 
 <Footer />

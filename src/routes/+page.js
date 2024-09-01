@@ -7,7 +7,7 @@ export async function load({fetch}) {
     };
 
     try {
-        let getJumbotronContentsResponse = await fetch(backendUrls.baseUrl + 'jumbotron/contents', {
+        let getJumbotronContentsResponse = await fetch(backendUrls.jumbotronContentsUrl, {
             method: 'GET',
             credentials: 'include',
             headers: {

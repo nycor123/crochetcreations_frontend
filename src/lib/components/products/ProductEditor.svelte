@@ -46,7 +46,7 @@
 
     async function getProduct(productId) {
         try {
-            let response = await fetch(backendUrls.baseUrl + `products/${productId}`, {
+            let response = await fetch(`${backendUrls.productsUrl}/${productId}`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -86,7 +86,7 @@
             let response = null;
             let resJson = null;
             if (productId === null) {
-                response = await fetch(backendUrls.baseUrl + "products", {
+                response = await fetch(backendUrls.productsUrl, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -96,7 +96,7 @@
                     body: JSON.stringify(products)
                 });
             } else {
-                response = await fetch(backendUrls.baseUrl + `products/${productId}`, {
+                response = await fetch(`${backendUrls.productsUrl}/${productId}`, {
                     method: "PATCH",
                     credentials: "include",
                     headers: {
@@ -116,7 +116,7 @@
                 goto(`/products/${productId}`);
             }
             form.classList.remove("was-validated");
-            triggerAlert("success", "Successfully saved product - ", siteUrls.products + resJson[0].id);
+            triggerAlert("success", "Successfully saved product - ", `${siteUrls.products}/${resJson[0].id}`);
             _images = [];
             form.reset();
         } catch(err) {
@@ -128,7 +128,7 @@
     async function uploadImage(file) {
         let formData = new FormData();
         formData.append("file", file);
-        let response = await fetch(backendUrls.baseUrl + "images/upload", {
+        let response = await fetch(backendUrls.imageUploadUrl, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -269,22 +269,23 @@
                             class="col-4 col-xl-3 my-2" 
                             on:dragover={allowDrop} 
                             on:drop={drop}
-                            role="none">
+                            role="none"
+                            style="position: relative;">
                             {#await generateUrl(image.file)}
                                 <span>...</span>
                             {:then generatedUrl}
                                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                                 <!-- svelte-ignore a11y-interactive-supports-focus -->
-                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                    width="3%" 
-                                    height="3%" 
-                                    fill="#D0D0D0" 
-                                    style="position: absolute;" 
-                                    class="bi bi-x-circle-fill mx-1 my-1" 
-                                    viewBox="0 0 16 16" 
-                                    role="button"
+                                <svg xmlns='http://www.w3.org/2000/svg' 
+                                    width='20%' 
+                                    height='20%' 
+                                    fill='red' 
+                                    style='position: absolute;'
+                                    class='bi bi-x-circle-fill mt-1' 
+                                    viewBox='0 0 16 16' 
+                                    role='button'
                                     on:click={() => removeImage(image)}>
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                                 </svg>
                                 <img 
                                     id={image.file !== null ? image.file.name : image.id}

@@ -5,6 +5,7 @@
 
     function getImgUrls() {
         let imgUrls = [];
+        product.images = product.images.sort((imgA, imgB) => imgA.priority - imgB.priority);
         for (const image of product.images) {
             imgUrls.push(image.url);
         }

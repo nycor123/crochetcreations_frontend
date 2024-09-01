@@ -1,5 +1,5 @@
 <script>
-    import ProductCard from '$lib/components/ProductCard.svelte';
+    import ProductCard from '$lib/components/products/ProductCard.svelte';
 
     export let group;
     export let products;

@@ -14,7 +14,7 @@
 
     async function getAllJumbotronContents() {
         try {
-            let response = await fetch(backendUrls.baseUrl + 'jumbotron/contents', {
+            let response = await fetch(backendUrls.jumbotronContentsUrl, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -51,8 +51,8 @@
 
     async function saveJumbotronContents(event) {
         try {
-            let response = await fetch(backendUrls.baseUrl + 'jumbotron/contents', {
-                method: 'PATCH',
+            let response = await fetch(backendUrls.jumbotronContentsUrl, {
+                method: 'PUT',
                 credentials: 'include',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
@@ -105,21 +105,22 @@
     {#if _editMode}
         {#each _payload as jContent}
             <div class='row mb-3'>
-                <div class='col-12'>
+                <div class='col-12' style='position: relative;'>
+                    <!-- svelte-ignore a11y-interactive-supports-focus -->
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <svg xmlns='http://www.w3.org/2000/svg' 
-                            width='6%' 
-                            height='6%' 
+                            width='10%' 
+                            height='15%' 
                             fill='red' 
                             style='position: absolute;' 
-                            class='bi bi-x-circle-fill mx-1 my-1' 
+                            class='bi bi-x-circle-fill mt-2'
                             viewBox='0 0 16 16' 
                             role='button'
                             on:click={() => deleteJumbotronContent(jContent)}>
-                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                            <path d='M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5'
+                                class='mx-0'/>
                     </svg>
-                    <a href='{siteUrls.update}?entity=jumbotronContent&id={jContent.id}'>
-                        <img src={jContent.image.url} alt='' width='100%'/>
-                    </a>
+                    <img src={jContent.image.url} alt='' width='100%'/>
                 </div>
             </div>
         {/each}
@@ -137,6 +138,8 @@
     
     <div class='row mb-3'>
         <div class='col-12'>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
             <h1 class='text-center' style='background-color: #9e806d; color: #E2DFD2; height: 100%' on:click={redirectToJumbotronEditor}>+<h1>
         </div>
     </div>

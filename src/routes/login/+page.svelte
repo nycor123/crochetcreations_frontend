@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { getUserInfo } from '$lib/index.js';
+    import { backendUrls, getUserInfo } from '$lib/index.js';
     import Alert from './Alert.svelte';
 
     let userData;
@@ -19,7 +19,7 @@
     let alertProps = {};
 
     async function authenticate() {
-        let response = await fetch('http://localhost:8080/api/v1/auth/signin', {
+        let response = await fetch(backendUrls.signInUrl, {
             method: 'POST',
             credentials: 'include',
             headers: {

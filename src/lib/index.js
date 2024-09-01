@@ -1,20 +1,15 @@
 // Frontend Urls
-const baseSiteUrl = 'http://localhost:5173/';
+const baseSiteUrl = 'http://localhost:5173';
 export const siteUrls = {
     home: baseSiteUrl,
-    admin: baseSiteUrl + 'admin/',
-    create: baseSiteUrl + 'admin/create/',
-    update: baseSiteUrl + 'admin/update/',
-    jumbotronContents: baseSiteUrl + 'admin/jumbotron-contents',
-    products: baseSiteUrl + 'products/'
+    admin: baseSiteUrl + '/admin',
+    create: baseSiteUrl + '/admin/create',
+    update: baseSiteUrl + '/admin/update',
+    jumbotronContents: baseSiteUrl + '/admin/jumbotron-contents',
+    products: baseSiteUrl + '/products'
 };
 
-// Backend Urls
-export const backendUrls = {
-    baseUrl: 'http://localhost:8080/api/v1/'
-}
-
-// Navigation
+// Navigation Urls
 export const navigationData = [
     {
         displayText: 'Home',
@@ -47,6 +42,18 @@ export const navigationData = [
     }
 ];
 
+// Backend Urls
+const backendBaseUrl = 'http://localhost:8080/api/v1';
+export const backendUrls = {
+    baseUrl: backendBaseUrl,
+    authUrl: backendBaseUrl + '/auth',
+    signInUrl: backendBaseUrl + '/auth/signin',
+    signOutUrl: backendBaseUrl + '/auth/signout',
+    productsUrl: backendBaseUrl + '/products',
+    imageUploadUrl: backendBaseUrl + '/images/upload',
+    jumbotronContentsUrl: backendBaseUrl + '/jumbotron/contents'
+}
+
 // Fetch Methods
 export async function getUserInfo() {
     try {
@@ -66,7 +73,7 @@ export async function getUserInfo() {
     }
 }
 
-export async function getFeaturedProducts() {
+export async function getAllProducts() {
     try {
         let response = await fetch('http://localhost:8080/api/v1/products', {
             method: 'GET',

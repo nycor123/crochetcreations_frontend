@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { getUserInfo, siteUrls } from '$lib/index.js';
+    import { getUserInfo, backendUrls, siteUrls } from '$lib/index.js';
     import logo_lg from '$lib/assets/JC_Logo.png';
     import logo_md from '$lib/assets/JC_Logo_Medium.png';
     import logo_sm from '$lib/assets/JC_Logo_Small.png';
@@ -41,7 +41,7 @@
     }
 
     function logout() {
-        fetch('http://localhost:8080/api/v1/auth/signout', {
+        fetch(backendUrls.signOutUrl, {
             method: 'POST',
             credentials: 'include',
             headers: {

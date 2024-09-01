@@ -1,6 +1,11 @@
 <script>
     import { onMount } from 'svelte';
-    import { getUserInfo, siteUrls, navigationData } from '$lib/index.js';
+    import { 
+        backendUrls,
+        siteUrls,
+        navigationData,
+        getUserInfo,
+     } from '$lib/index.js';
     import Header from '$lib/components/Header.svelte';
     import Navigation from '$lib/components/Navigation.svelte';
     import Footer from '$lib/components/Footer.svelte';
@@ -12,6 +17,7 @@
     let productData;
     let images = [];
     let description = [];
+    
     $: productDataLoaded = productData != null;
 
     onMount(async () => {
@@ -28,7 +34,7 @@
     let innerWidth;
    
     async function getProductData() {
-        let response = await fetch(`http://localhost:8080/api/v1/products/${data.productId}`, {
+        let response = await fetch(`${backendUrls.productsUrl}/${data.productId}`, {
             method: "GET",
             credentials: "include",
             headers: {

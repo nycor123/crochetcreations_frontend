@@ -6,7 +6,6 @@
     export let jumbotronContentId;
 
     let _jumbotronContents= [];
-
     let _jumbotronContent = {
         id: null,
         imageId: null,
@@ -15,7 +14,6 @@
         priority: null,
         tempImgUrl: null
     };
-
     let _isSaving = false;
 
     onMount(async () => {
@@ -51,7 +49,7 @@
             }
             let response = null;
             if (jumbotronContentId === null) {
-                response = await fetch(backendUrls.baseUrl + "jumbotron/contents", {
+                response = await fetch(backendUrls.jumbotronContentsUrl, {
                         method: "POST",
                         credentials: "include",
                         headers: {
@@ -61,7 +59,7 @@
                         body: JSON.stringify(payload)
                     });
             } else {
-                response = await fetch(backendUrls.baseUrl + `jumbotron/contents/${jumbotronContentId}`, {
+                response = await fetch(`${backendUrls.jumbotronContentsUrl}/${jumbotronContentId}`, {
                         method: "PATCH",
                         credentials: "include",
                         headers: {
@@ -112,7 +110,7 @@
     async function uploadImage(file) {
         let formData = new FormData();
         formData.append("file", file);
-        let response = await fetch(backendUrls.baseUrl + "images/upload", {
+        let response = await fetch(backendUrls.imageUploadUrl, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -126,7 +124,7 @@
 
     async function getJumbotronContent(jContentId) {
         try {
-            let response = await fetch(backendUrls.baseUrl + 'jumbotron/contents/' + jumbotronContentId, {
+            let response = await fetch(`${backendUrls.jumbotronContentsUrl}/${jumbotronContentId}`, {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -141,7 +139,7 @@
 
     async function getAllJumbotronContents() {
         try {
-            let response = await fetch(backendUrls.baseUrl + 'jumbotron/contents', {
+            let response = await fetch(backendUrls.jumbotronContentsUrl, {
                 method: "GET",
                 credentials: "include",
                 headers: {
