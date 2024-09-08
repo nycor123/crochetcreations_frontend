@@ -61,13 +61,37 @@
                 body: JSON.stringify(_payload)
             });
             let updatedJumbotronContents = await response.json();
-            _jumbotronContents = updatedJumbotronContents;
+            _jumbotronContents = updatedJumbotronContents.sort((jcA, jcB) => jcA.priority - jcB.priority);
         } catch(err) {
             console.log(err);
             //TODO: Show error message on failed save.
         }
         _editMode = false;
         //TODO: Show success message on successful save.
+    }
+
+    function drag(event) {
+        let data = {
+            divId: event.target.parentElement.parentElement.id
+        };
+        event.dataTransfer.setData('text/plain', JSON.stringify(data));
+    }
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        let data = JSON.parse(event.dataTransfer.getData("text"));
+        let sourceDiv = document.getElementById(data.divId);
+        let targetDiv = event.target.parentElement.parentElement;
+        let sourceJContent = _payload.find((jc) => jc.priority === Number(sourceDiv.id.replace('jContent-', '')));
+        let targetJContent = _payload.find((jc) => jc.priority === Number(targetDiv.id.replace('jContent-', '')));
+        let originalSourceJCPriority = sourceJContent.priority;
+        sourceJContent.priority = targetJContent.priority;
+        targetJContent.priority = originalSourceJCPriority;
+        _payload = _payload.sort((jcA, jcB) => jcA.priority - jcB.priority);
     }
 
     function reset(event) {
@@ -104,7 +128,13 @@
     <h1 class='mt-3 mb-3' style='color: #9e806d'>Jumbotron Contents</h1>
     {#if _editMode}
         {#each _payload as jContent}
-            <div class='row mb-3'>
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div 
+                id={'jContent-' + jContent.priority} 
+                class='row mb-3' 
+                on:dragstart={drag}
+                on:dragover={allowDrop} 
+                on:drop={drop}>
                 <div class='col-12' style='position: relative;'>
                     <!-- svelte-ignore a11y-interactive-supports-focus -->
                     <!-- svelte-ignore a11y-click-events-have-key-events -->

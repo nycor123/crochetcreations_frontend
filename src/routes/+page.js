@@ -15,7 +15,7 @@ export async function load({fetch}) {
             }
         });
         let jumbotronContents = await getJumbotronContentsResponse.json();
-        data.jumbotronContents = jumbotronContents;
+        data.jumbotronContents = jumbotronContents.sort((jcA, jcB) => jcA.priority - jcB.priority);
     } catch (err) {
         console.log(err);
     }
