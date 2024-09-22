@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { backendUrls, getUserInfo } from '$lib/index.js';
+    import { backendUrls, getUserInfo, signinWithGoogleUrl } from '$lib/index.js';
     import Alert from './Alert.svelte';
 
     let userData;
@@ -77,13 +77,14 @@
             </div>
             <button type='submit' class='btn btn-primary' style="background-color: #9e806d; border: none;">Submit</button>
         </form>
+        <p><a href={signinWithGoogleUrl} style="color: #9e806d;">Sign in with Google</a></p>
         <a href='/' style="color: #9e806d;">Back to Home</a>
     </div>
 </div>
 
 <style>
     .login-form {
-        margin-top: 2em;
+        padding-top: 2em;
     }
     input:focus {
         border-color: #806657;

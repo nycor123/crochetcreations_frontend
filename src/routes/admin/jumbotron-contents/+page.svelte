@@ -104,7 +104,7 @@
 </script>
 
 <div class='container'>
-    <div class='row mb-3 mt-3'>
+    <div class='row mb-3 pt-3'>
         <div class='col-6 d-flex'>
             <p><a href='{siteUrls.admin}' style='color: gray;'>Back</a></p>
         </div>

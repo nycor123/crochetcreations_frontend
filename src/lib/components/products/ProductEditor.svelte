@@ -232,7 +232,7 @@
 
 </script>
 
-<div class="row mx-3 my-3">
+<div class="row mx-3 py-3">
     <div class="col-12 col-md-8 col-lg-6 mx-auto">
         <div id="alertPlaceholder"></div>
 

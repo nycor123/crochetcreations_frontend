@@ -2,21 +2,34 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { getUserInfo, backendUrls, siteUrls } from '$lib/index.js';
-    import logo_lg from '$lib/assets/JC_Logo.png';
-    import logo_md from '$lib/assets/JC_Logo_Medium.png';
-    import logo_sm from '$lib/assets/JC_Logo_Small.png';
+    import logo_lg from '$lib/assets/logo_no_bg.png';
+    import logo_md from '$lib/assets/logo_no_bg.png';
+    import logo_sm from '$lib/assets/logo_no_bg.png';
 
     export let navData;
 
-    let userData;
+    let userData = {
+        email: null,
+        firstName: null,
+        lastName: null,
+        role: null,
+        pictureUrl: null
+    };
 
     onMount(async () => {
-        userData = await getUserInfo();
+        let fetchedUserData = await getUserInfo();
+        if (fetchedUserData != null) {
+            userData.email = fetchedUserData.email;
+            userData.firstName = fetchedUserData.firstName;
+            userData.lastName = fetchedUserData.lastName;
+            userData.role = fetchedUserData.role;
+            userData.pictureUrl = fetchedUserData.pictureUrl;
+        }
     });
 
     let innerWidth;
 
-    $: isLoggedIn = userData != null;
+    $: isLoggedIn = userData.email != null;
     $: logo = getLogo(innerWidth);
     $: svgSize = getSvgSize(innerWidth);
 
@@ -48,7 +61,7 @@
                 'Accept' : 'application/json'
             }
         }).then((response) => {
-            userData = null;
+            Object.keys(userData).forEach(k => userData[k] = null);
             goto('/');
         });
     }
@@ -99,7 +112,7 @@
     
     <div>
         <a class='navbar-brand mx-auto' href='/'>
-            <img src={logo} alt='site-logo' />
+            <img src={logo} alt='site-logo'  style="width: 200px; height: 200px;"/>
         </a>
     </div>
     
@@ -107,16 +120,23 @@
         {#if isLoggedIn}
             <div class='btn-group dropstart me-2'>
                 <a class='nav-link' href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                    <svg 
-                        xmlns='http://www.w3.org/2000/svg' 
-                        width='{svgSize}' 
-                        height='{svgSize}' 
-                        fill='currentColor' 
-                        class='bi bi-person-check' 
-                        viewBox='0 0 16 16'>
-                        <path d='M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4'/>
-                        <path d='M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z'/>
-                    </svg>
+                    {#if userData.pictureUrl != null}
+                        {#if innerWidth > 768}
+                        <span style="font-size: .8rem;">Hi, {userData.firstName}!</span>
+                        {/if}
+                        <img src={userData.pictureUrl} style="width: 1.6rem; height: 1.6rem; border-radius: 50%;"/>
+                    {:else}
+                        <svg 
+                            xmlns='http://www.w3.org/2000/svg' 
+                            width='{svgSize}' 
+                            height='{svgSize}' 
+                            fill='currentColor' 
+                            class='bi bi-person-check' 
+                            viewBox='0 0 16 16'>
+                            <path d='M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4'/>
+                            <path d='M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z'/>
+                        </svg>
+                    {/if}
                 </a>
                 <ul class='dropdown-menu'>
                     {#if userData.role != null && userData.role.toLowerCase() === 'admin'}

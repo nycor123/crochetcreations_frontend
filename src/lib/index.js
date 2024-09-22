@@ -43,7 +43,8 @@ export const navigationData = [
 ];
 
 // Backend Urls
-const backendBaseUrl = 'http://localhost:8080/api/v1';
+const backendUrl = 'http://localhost:8080';
+const backendBaseUrl = backendUrl + '/api/v1';
 export const backendUrls = {
     baseUrl: backendBaseUrl,
     authUrl: backendBaseUrl + '/auth',
@@ -51,8 +52,13 @@ export const backendUrls = {
     signOutUrl: backendBaseUrl + '/auth/signout',
     productsUrl: backendBaseUrl + '/products',
     imageUploadUrl: backendBaseUrl + '/images/upload',
-    jumbotronContentsUrl: backendBaseUrl + '/jumbotron/contents'
+    jumbotronContentsUrl: backendBaseUrl + '/jumbotron/contents',
+    signInGoogleUrl: backendBaseUrl + '/auth/signin-google'
 }
+
+// Google APIs
+const googleOAuthClientID = '646663393985-pjj9o835s60cdtgbu0ganjd6b02k9rnn.apps.googleusercontent.com'
+export const signinWithGoogleUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${baseSiteUrl}&response_type=code&client_id=${googleOAuthClientID}&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline`
 
 // Fetch Methods
 export async function getUserInfo() {

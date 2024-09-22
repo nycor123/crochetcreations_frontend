@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
-    import { getAllProducts } from '$lib/index.js';
+    import { getAllProducts, getUserInfo, siteUrls, backendUrls } from '$lib/index.js';
+    import { page } from '$app/stores';
     import Header from '$lib/components/Header.svelte';
 	import AnnouncementSlide from '$lib/components/AnnouncementSlide.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
@@ -14,6 +15,27 @@
 
     onMount(async () => {
         _allProducts = await getAllProducts();
+        //Start of Google OAuth flow.
+        let userData = await getUserInfo();
+        if ($page.url.searchParams.get('code') != null && userData == null) {
+            let payload = {
+                grantCode: $page.url.searchParams.get('code'),
+                redirectUri: siteUrls.home
+            };
+            let response = await fetch(backendUrls.signInGoogleUrl, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            let responseObj = await response.json();
+            location.reload();
+            // TODO: Show welcome message upon signing in.
+        }
+        //End of Google OAuth flow.
     });
 
     let innerWidth;
