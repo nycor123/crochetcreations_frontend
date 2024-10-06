@@ -63,7 +63,7 @@ export const signinWithGoogleUrl = `https://accounts.google.com/o/oauth2/v2/auth
 // Fetch Methods
 export async function getUserInfo() {
     try {
-        let response = await fetch('http://localhost:8080/api/v1/user/info', {
+        let response = await fetch(`${backendUrl}/api/v1/user/info`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -81,7 +81,7 @@ export async function getUserInfo() {
 
 export async function getAllProducts() {
     try {
-        let response = await fetch('http://localhost:8080/api/v1/products', {
+        let response = await fetch(`${backendUrl}/api/v1/products`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -92,4 +92,12 @@ export async function getAllProducts() {
     } catch(err) {
         console.log(err);
     }
+}
+
+// Colors
+export const colors = {
+    primary: '#D1BB9E',
+    secondary: '#EAD8C0',
+    body: '#FFF2E1',
+    font: '#5C4033'
 }

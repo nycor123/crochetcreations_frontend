@@ -1,4 +1,6 @@
 <script>
+    import {colors} from '$lib/index.js';
+
     export let product;
 
     $: _imgUrls = product.images == null || product.images.length == 0 ? ["https://placehold.co/600"] : getImgUrls();
@@ -15,7 +17,7 @@
 
 <div class="card">
     <img src={_imgUrls[0]} class="card-img-top" alt="...">
-    <div class="card-body text-center">
+    <div class="card-body text-center" style="background-color: {colors.secondary}">
         <p class="name card-text">{product.name}</p>
         <p class="price card-text"><strong>₱{product.effectivePrice.amount.toLocaleString()}.00</strong></p>
     </div>

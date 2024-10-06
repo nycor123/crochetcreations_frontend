@@ -45,13 +45,8 @@
 
 <AnnouncementSlide />
 
-<Header navData={data.navigationData} />
-
-{#if innerWidth > 768}
-    <Navigation navigationData={data.navigationData} />
-{/if}
-
 <div class='container mt-4'>
+    <Header navData={data.navigationData} />
     <Carousel jumbotronContents={data.jumbotronContents} /> <!-- min/max: 1200x600 -->
     <Products 
         group='All Products' 

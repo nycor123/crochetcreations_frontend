@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { colors } from "$lib/index.js";
 
     export let navigationData;
 
@@ -16,7 +17,7 @@
     });
 </script>
 
-<nav class="navbar justify-content-center">
+<div class="nav" style="color: {colors.font};">
     {#each navigationData as navData}
         {#if navData.link}
                 <a class="nav-link" href={navData.link}>{navData.displayText}</a>
@@ -35,10 +36,11 @@
             </div>
         {/if}
     {/each}
-</nav>
-
+</div>
+ 
 <style>
-    .nav-link {
-        margin-right: 2em;
+    a {
+        color: #5C4033;
+        font-size: larger;
     }
 </style>
