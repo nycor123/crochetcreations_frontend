@@ -51,6 +51,7 @@ export const backendUrls = {
     signInUrl: backendBaseUrl + '/auth/signin',
     signOutUrl: backendBaseUrl + '/auth/signout',
     productsUrl: backendBaseUrl + '/products',
+    productsSearchUrl: backendBaseUrl + '/products/search',
     imageUploadUrl: backendBaseUrl + '/images/upload',
     jumbotronContentsUrl: backendBaseUrl + '/jumbotron/contents',
     signInGoogleUrl: backendBaseUrl + '/auth/signin-google'
@@ -81,7 +82,7 @@ export async function getUserInfo() {
 
 export async function getAllProducts() {
     try {
-        let response = await fetch(`${backendUrl}/api/v1/products`, {
+        let response = await fetch(`${backendUrl}/api/v1/products?page=0&size=8`, {
             method: 'GET',
             credentials: 'include',
             headers: {

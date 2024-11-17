@@ -50,11 +50,9 @@
 
 <AnnouncementSlide />
 
-<Header navData={navigationData} />
-
-{#if innerWidth > 768}
-    <Navigation navigationData={navigationData} />
-{/if}
+<div class='container'>
+    <Header navData={navigationData} />
+</div>
 
 {#if productDataLoaded}
     <div class="container mt-4">

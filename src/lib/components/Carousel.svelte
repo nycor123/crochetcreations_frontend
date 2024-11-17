@@ -2,7 +2,7 @@
   export let jumbotronContents;
 </script>
 
-<div id='myCarousel' class='carousel slide' data-bs-ride='carousel'>
+<div id='myCarousel' class='carousel slide mt-3' data-bs-ride='carousel'>
   <div class='carousel-indicators'>
     {#if jumbotronContents != null && jumbotronContents.length > 0}
       {#each jumbotronContents as jumbotronContent, i}

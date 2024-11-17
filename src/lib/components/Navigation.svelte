@@ -26,7 +26,7 @@
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {navData.displayText}
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" style='background-color: {colors.secondary};'>
                     {#each navData.links as childLink}
                     <li class="nav-item">
                         <a class="nav-link" href={childLink.link}>{childLink.displayText}</a>
@@ -42,5 +42,9 @@
     a {
         color: #5C4033;
         font-size: larger;
+    }
+
+    .dropdown > ul > li > a {
+        font-size: medium;
     }
 </style>

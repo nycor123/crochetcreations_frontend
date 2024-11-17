@@ -255,7 +255,7 @@
             <div class="input-group mb-3">
                 <span class="input-group-text">₱</span>
                 <div class="form-floating">
-                    <input id="priceInput" type="number" class="form-control" placeholder="" bind:value={ _product.price }>
+                    <input id="priceInput" type="number" class="form-control" placeholder="" bind:value={ _product.price } required>
                     <label for="priceInput" class="form-label">Price</label>
                 </div>
             </div>

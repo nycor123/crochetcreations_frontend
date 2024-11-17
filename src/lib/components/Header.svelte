@@ -123,20 +123,20 @@
                     </svg>
                 {/if}
             </a>
-            <ul class='dropdown-menu'>
+            <ul class='dropdown-menu' style='background-color: {colors.secondary};'>
                 {#if userData.role != null && userData.role.toLowerCase() === 'admin'}
                     <li class='nav-item'>
-                        <a class='nav-link ms-2' href={siteUrls.admin} role='button'>Admin</a>
+                        <a class='nav-link ms-2' href={siteUrls.admin} role='button' style='color: {colors.font};'>Admin</a>
                     </li>
                 {/if}
                 <li class='nav-item'>
-                    <a class='nav-link ms-2' href='#' role='button'>My Account</a>
+                    <a class='nav-link ms-2' href='#' role='button' style='color: {colors.font};'>My Account</a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link ms-2' href='#' role='button'>My Purchases</a>
+                    <a class='nav-link ms-2' href='#' role='button' style='color: {colors.font};'>My Purchases</a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link ms-2' href='#' role='button' on:click={logout}>Logout</a>
+                    <a class='nav-link ms-2' href='#' role='button' style='color: {colors.font};' on:click={logout}>Logout</a>
                 </li>
             </ul>
         </div>
@@ -173,5 +173,9 @@
     }
     a {
         text-decoration: none;
+        color: #5C4033;
+    }
+    h1 {
+        font-family: "Oswald";
     }
 </style>

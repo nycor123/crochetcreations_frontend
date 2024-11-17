@@ -4,10 +4,10 @@
     import { page } from '$app/stores';
     import Header from '$lib/components/Header.svelte';
 	import AnnouncementSlide from '$lib/components/AnnouncementSlide.svelte';
-	import Navigation from '$lib/components/Navigation.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
 	import Products from '$lib/components/products/Products.svelte';
     import Footer from '$lib/components/Footer.svelte';
+    import ProductSearchBar from '$lib/components/products/ProductSearchBar.svelte';
 
     export let data;
 
@@ -45,18 +45,16 @@
 
 <AnnouncementSlide />
 
-<div class='container mt-4'>
+<div class='container-xl mt-4'>
     <Header navData={data.navigationData} />
     <Carousel jumbotronContents={data.jumbotronContents} /> <!-- min/max: 1200x600 -->
+    <ProductSearchBar />
+    <Products 
+        group='New Releases' 
+        products={_allProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
     <Products 
         group='All Products' 
         products={_allProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
 </div>
 
 <Footer />
-
-<style>
-    .container {
-        max-width: 1140px;
-    }
-</style>
