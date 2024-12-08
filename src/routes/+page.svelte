@@ -1,33 +1,38 @@
 <script>
-    import { onMount } from 'svelte';
-    import { getAllProducts, getUserInfo, siteUrls, backendUrls } from '$lib/index.js';
-    import { page } from '$app/stores';
-    import Header from '$lib/components/Header.svelte';
-	import AnnouncementSlide from '$lib/components/AnnouncementSlide.svelte';
-	import Carousel from '$lib/components/Carousel.svelte';
-	import Products from '$lib/components/products/Products.svelte';
-    import Footer from '$lib/components/Footer.svelte';
-    import ProductSearchBar from '$lib/components/products/ProductSearchBar.svelte';
+    import { onMount } from "svelte";
+    import { getUserInfo, siteUrls, backendUrls } from "$lib/index.js";
+    import { page } from "$app/stores";
+    import Header from "$lib/components/Header.svelte";
+	import AnnouncementSlide from "$lib/components/AnnouncementSlide.svelte";
+	import Carousel from "$lib/components/Carousel.svelte";
+	import Products from "$lib/components/products/Products.svelte";
+    import Footer from "$lib/components/Footer.svelte";
+    import ProductSearchBar from "$lib/components/products/ProductSearchBar.svelte";
 
     export let data;
 
-    let _allProducts = [];
+    let _searchCriteria = {
+        name: "",
+        page: 0,
+        pageSize: 8,
+        sortBy: "name",
+        sortDirection: "asc"
+    }
 
     onMount(async () => {
-        _allProducts = await getAllProducts();
         //Start of Google OAuth flow.
         let userData = await getUserInfo();
-        if ($page.url.searchParams.get('code') != null && userData == null) {
+        if ($page.url.searchParams.get("code") != null && userData == null) {
             let payload = {
-                grantCode: $page.url.searchParams.get('code'),
+                grantCode: $page.url.searchParams.get("code"),
                 redirectUri: siteUrls.home
             };
             let response = await fetch(backendUrls.signInGoogleUrl, {
-                method: 'POST',
-                credentials: 'include',
+                method: "POST",
+                credentials: "include",
                 headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
+                    "Content-type": "application/json; charset=UTF-8",
+                    "Accept": "application/json"
                 },
                 body: JSON.stringify(payload)
             });
@@ -45,16 +50,16 @@
 
 <AnnouncementSlide />
 
-<div class='container-xl mt-4'>
+<div class="container-xl mt-4">
     <Header navData={data.navigationData} />
     <Carousel jumbotronContents={data.jumbotronContents} /> <!-- min/max: 1200x600 -->
     <ProductSearchBar />
     <Products 
-        group='New Releases' 
-        products={_allProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
+        group="New Releases" 
+        searchCriteria={_searchCriteria} /> <!-- min: 600x600 | max: 1024x1024 -->
     <Products 
-        group='All Products' 
-        products={_allProducts} /> <!-- min: 600x600 | max: 1024x1024 -->
+        group="All Products" 
+        searchCriteria={_searchCriteria} /> <!-- min: 600x600 | max: 1024x1024 -->
 </div>
 
 <Footer />

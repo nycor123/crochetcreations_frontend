@@ -1,4 +1,4 @@
-import { backendUrls, navigationData } from '$lib/index.js';
+import { backendUrls, navigationData } from "$lib/index.js";
 
 export async function load({fetch}) {
     let data = {
@@ -8,10 +8,10 @@ export async function load({fetch}) {
 
     try {
         let getJumbotronContentsResponse = await fetch(backendUrls.jumbotronContentsUrl, {
-            method: 'GET',
-            credentials: 'include',
+            method: "GET",
+            credentials: "include",
             headers: {
-                'Accept' : 'application/json'
+                "Accept" : "application/json"
             }
         });
         let jumbotronContents = await getJumbotronContentsResponse.json();
