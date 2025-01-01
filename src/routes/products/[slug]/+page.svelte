@@ -1,13 +1,8 @@
 <script>
     import { onMount } from 'svelte';
-    import { 
-        backendUrls,
-        siteUrls,
-        navigationData,
-        getUserInfo,
-     } from '$lib/index.js';
+    import { goto } from '$app/navigation';
+    import { siteUrls, navigationData } from '$lib/index.js';
     import Header from '$lib/components/Header.svelte';
-    import Navigation from '$lib/components/Navigation.svelte';
     import Footer from '$lib/components/Footer.svelte';
     import AnnouncementSlide from '$lib/components/AnnouncementSlide.svelte';
 
@@ -20,30 +15,21 @@
     
     $: productDataLoaded = productData != null;
 
-    onMount(async () => {
-        userData = await getUserInfo();
-        productData = await getProductData();
-        images = (productData.images === null || productData.images.length === 0) ? 
-            [{ url: 'https://placehold.co/600' }] : productData.images;
-        if (productData.images.length > 1) {
-            images = productData.images.sort((img1, img2) => img1.priority - img2.priority);
-        }
-        description = productData.description == null ? "" : productData.description.split('\n');
+    onMount(() => {
+        userData = data.userData;
+        productData = data.productData;
+        if (productData === null) {
+            goto("/");
+        } else {
+            images = (productData.images === null || productData.images.length === 0) ? [{ url: 'https://placehold.co/600' }] : productData.images;
+            if (productData.images.length > 1) {
+                images = productData.images.sort((img1, img2) => img1.priority - img2.priority);
+            }
+            description = productData.description == null ? "" : productData.description.split('\n');
+        }   
     });
 
     let innerWidth;
-   
-    async function getProductData() {
-        let response = await fetch(`${backendUrls.productsUrl}/${data.productId}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Accept": "application/json"
-            }
-        });
-        let product = await response.json();
-        return product;
-    }
 </script>
 
 <svelte:window bind:innerWidth />

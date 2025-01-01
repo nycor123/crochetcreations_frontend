@@ -11,7 +11,7 @@
 
     export let data;
 
-    let _searchCriteria = {
+    let _productSearchCriteria = {
         name: "",
         page: 0,
         pageSize: 8,
@@ -56,10 +56,10 @@
     <ProductSearchBar />
     <Products 
         group="New Releases" 
-        searchCriteria={_searchCriteria} /> <!-- min: 600x600 | max: 1024x1024 -->
+        searchCriteria={_productSearchCriteria} /> <!-- min: 600x600 | max: 1024x1024 -->
     <Products 
         group="All Products" 
-        searchCriteria={_searchCriteria} /> <!-- min: 600x600 | max: 1024x1024 -->
+        searchCriteria={_productSearchCriteria} /> <!-- min: 600x600 | max: 1024x1024 -->
 </div>
 
 <Footer />

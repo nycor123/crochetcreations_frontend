@@ -62,9 +62,9 @@ const googleOAuthClientID = "646663393985-pjj9o835s60cdtgbu0ganjd6b02k9rnn.apps.
 export const signinWithGoogleUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${baseSiteUrl}&response_type=code&client_id=${googleOAuthClientID}&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&access_type=offline`
 
 // Fetch Methods
-export async function getUserInfo() {
+export async function getUserInfo(fetchParam = fetch) {
     try {
-        let response = await fetch(`${backendUrl}/api/v1/user/info`, {
+        let response = await fetchParam(`${backendUrl}/api/v1/user/info`, {
             method: "GET",
             credentials: "include",
             headers: {
